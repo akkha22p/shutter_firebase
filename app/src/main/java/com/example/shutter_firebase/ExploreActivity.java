@@ -62,20 +62,19 @@ public class ExploreActivity extends AppCompatActivity {
                 // mDrawer.closeDrawer(GravityCompat.START);
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_explore: {
-
+                        break;
                     }
-                    break;
                     case R.id.navigation_feed: {
                         intent.setClass(ExploreActivity.this, FeedActivity.class);
                         startActivity(intent);
+                        break;
                     }
-                    break;
+
                     case R.id.userPage: {
                         intent.setClass(ExploreActivity.this, EditProfileActivity.class);
                         startActivity(intent);
+                        break;
                     }
-                    break;
-
                 }
                 return true;
             }

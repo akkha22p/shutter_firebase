@@ -61,23 +61,18 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Intent intent = getIntent();
 
-                // mDrawer.closeDrawer(GravityCompat.START);
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_explore: {
                         intent.setClass(EditProfileActivity.this, ExploreActivity.class);
                         startActivity(intent);
                     }
-                    break;
                     case R.id.navigation_feed: {
                         intent.setClass(EditProfileActivity.this, FeedActivity.class);
                         startActivity(intent);
                     }
-                    break;
                     case R.id.userPage: {
 
                     }
-                    break;
-
                 }
                 return true;
             }

@@ -30,18 +30,17 @@ public class FeedActivity extends AppCompatActivity {
                     case R.id.navigation_explore: {
                         intent.setClass(FeedActivity.this, ExploreActivity.class);
                         startActivity(intent);
+                        break;
                     }
-                    break;
-                    case R.id.navigation_feed: {
 
+                    case R.id.navigation_feed: {
+                        break;
                     }
-                    break;
                     case R.id.userPage: {
                         intent.setClass(FeedActivity.this, EditProfileActivity.class);
                         startActivity(intent);
+                        break;
                     }
-                    break;
-
                 }
                 return true;
             }
