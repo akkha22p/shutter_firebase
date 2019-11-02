@@ -18,6 +18,10 @@ public class FeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
+        manageNavigationBar();
+    }
+
+    private void manageNavigationBar() {
         mNavigationView = findViewById(R.id.navigationView);
 
         mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

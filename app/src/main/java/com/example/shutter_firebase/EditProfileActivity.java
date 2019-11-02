@@ -54,29 +54,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         buttonSave.setOnClickListener(this);
 
         db = FirebaseFirestore.getInstance();
-        mNavigationView = findViewById(R.id.navigationView);
 
-        mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Intent intent = getIntent();
-
-                switch (menuItem.getItemId()) {
-                    case R.id.navigation_explore: {
-                        intent.setClass(EditProfileActivity.this, ExploreActivity.class);
-                        startActivity(intent);
-                    }
-                    case R.id.navigation_feed: {
-                        intent.setClass(EditProfileActivity.this, FeedActivity.class);
-                        startActivity(intent);
-                    }
-                    case R.id.userPage: {
-
-                    }
-                }
-                return true;
-            }
-        });
+        manageNavigationBar();
 
     }
     public void onClick(View view){
@@ -180,5 +159,32 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
+    }
+    private void manageNavigationBar(){
+        mNavigationView = findViewById(R.id.navigationView);
+
+        mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Intent intent = getIntent();
+
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_explore: {
+                        intent.setClass(EditProfileActivity.this, ExploreActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.navigation_feed: {
+                        intent.setClass(EditProfileActivity.this, FeedActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.userPage: {
+                        break;
+                    }
+                }
+                return true;
+            }
+        });
     }
 }

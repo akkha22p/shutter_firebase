@@ -49,9 +49,12 @@ public class ExploreActivity extends AppCompatActivity {
         profileArrayList = new ArrayList<>();
 
         setUpRecyclerView();
-        setUpFirebase();
-        addUserDataToFirebase();
+        setUpFireBase();
         loadData();
+        manageNavigationBar();
+    }
+
+    private void manageNavigationBar(){
         mNavigationView = findViewById(R.id.navigationView);
 
         mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,7 +62,6 @@ public class ExploreActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Intent intent = getIntent();
 
-                // mDrawer.closeDrawer(GravityCompat.START);
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_explore: {
                         break;
@@ -80,8 +82,6 @@ public class ExploreActivity extends AppCompatActivity {
             }
         });
     }
-
-
     private void loadData(){
         db.collection("users")
                 .get()
@@ -114,49 +114,7 @@ public class ExploreActivity extends AppCompatActivity {
                 });
     }
 
-    private void addUserDataToFirebase(){
-
-        Random random = new Random();
-
-        DocumentReference ref = db.collection("users").document();
-
-        Map<String, Object> classes = new HashMap<>();
-
-        ArrayList<String> mClasses = new ArrayList<>();
-        mClasses.add("Data Structures");
-        mClasses.add("Algo");
-        mClasses.add("Tango");
-
-        Map<String, Object> internship = new HashMap<>();
-
-        ArrayList<String> mInternship = new ArrayList<>();
-        mInternship.add("Agoda");
-
-        Map<String, Object> club = new HashMap<>();
-
-        ArrayList<String> mClub = new ArrayList<>();
-        mClub.add("CS Society");
-
-        classes.put("classes", mClasses);
-        club.put("clubs", mClub);
-        internship.put("internships", mInternship);
-
-        Map<String, Object> dataMap = new HashMap<>();
-
-        dataMap.put("name", random.nextInt()+"");
-        dataMap.put("major", "Computer Science");
-        //dataMap.put("studyAbroad", true);
-        //dataMap.put("abroadCountries", "Hungary");
-
-
-        ref.set(dataMap);
-        ref.collection("courses").document().set(classes);
-        ref.collection("internships").document().set(internship);
-        ref.collection("clubs").document().set(club);
-
-    }
-
-    private void setUpFirebase(){
+    private void setUpFireBase(){
         db = FirebaseFirestore.getInstance();
     }
 
