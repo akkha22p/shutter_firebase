@@ -7,16 +7,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.shutter_firebase.adapterAndView.RecyclerViewAdapter;
+import com.example.shutter_firebase.data.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,10 +36,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private EditText editTextName;
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private EditText editTextMajor;
-    private EditText editTextClasses;
-    private EditText editTextInternships;
-    private EditText editTextClubs;
+    private EditText editTextCountry;
+    private EditText editTextCity;
+    private EditText editTextAboutMe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +49,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
         editTextName = (EditText) findViewById(R.id.editName);
         editTextEmail = (EditText) findViewById(R.id.editEmail);
-        editTextClasses=(EditText) findViewById(R.id.editClasses);
+        editTextCity=(EditText) findViewById(R.id.editCity);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        editTextMajor = (EditText) findViewById(R.id.editMajor);
-        editTextInternships = (EditText) findViewById(R.id.editInternship);
-        editTextClubs = (EditText) findViewById(R.id.editClubs);
+        editTextCountry = (EditText) findViewById(R.id.editCountry);
+        editTextAboutMe = (EditText) findViewById(R.id.editTextAboutMe);
 
         buttonSave.setOnClickListener(this);
 
@@ -60,13 +63,37 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     }
     public void onClick(View view){
         if(view == buttonSave){
-            addUserDataToFirebase();
+            updateUserDataToFirebase();
         }
 
     }
-    private void addUserDataToFirebase() {
+    private void updateUserDataToFirebase() {
 
-        //Random random = new Random();
+        db.collection("photographers")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for(DocumentSnapshot querySnapshot: task.getResult()){
+                            User user = new User(
+                                    querySnapshot.getId(),
+                                    querySnapshot.getString("name"),
+                                    querySnapshot.getString("email"),
+                                    querySnapshot.getString("country"),
+                                    querySnapshot.getString("city"),
+                                    querySnapshot.getString("aboutme"),
+                                    querySnapshot.getString("imageurl"));
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(EditProfileActivity.this, "Problem", Toast.LENGTH_SHORT).show();
+                        Log.w("Problem", e.getMessage());
+                    }
+                });
 
 
         String emailEdit = editTextEmail.getText().toString().trim();
@@ -81,47 +108,37 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         if(nameEdit.isEmpty()){
             nameEdit = " ";
         }
-        String majorEdit = editTextMajor.getText().toString().trim();
-        if(majorEdit.isEmpty()) {
-            majorEdit = " ";
+        String countryEdit = editTextCountry.getText().toString().trim();
+        if(countryEdit.isEmpty()) {
+            countryEdit = " ";
         }
-        String classEdit = editTextClasses.getText().toString().trim();
-        if(classEdit.isEmpty()){
-            classEdit=" ";
+        String cityEdit = editTextCity.getText().toString().trim();
+        if(cityEdit.isEmpty()){
+            cityEdit=" ";
         }
-        String internshipEdit = editTextInternships.getText().toString().trim();
-        if(internshipEdit.isEmpty()){
-            internshipEdit=" ";
-        }
-        String clubEdit = editTextClubs.getText().toString().trim();
-        if (clubEdit.isEmpty()){
-            clubEdit=" ";
+        String aboutMeEdit = editTextAboutMe.getText().toString().trim();
+        if(aboutMeEdit.isEmpty()){
+            aboutMeEdit=" ";
         }
 
-        DocumentReference ref = db.collection("users").document();
+        DocumentReference ref = db.collection("photographers").document();
 
-        Map<String, Object> classes = new HashMap<>();
-        ArrayList<String> mClasses = new ArrayList<>();
-        mClasses.add(classEdit);
+        Map<String, Object> city = new HashMap<>();
+        ArrayList<String> mCity = new ArrayList<>();
+        mCity.add(cityEdit);
 
-        Map<String, Object> internships = new HashMap<>();
-        ArrayList<String> mInternship = new ArrayList<>();
-        mInternship.add(internshipEdit);
+        Map<String, Object> aboutMe = new HashMap<>();
+        ArrayList<String> mAboutMe = new ArrayList<>();
+        mAboutMe.add(aboutMeEdit);
 
-        Map<String, Object> clubs = new HashMap<>();
-        ArrayList<String> mClub = new ArrayList<>();
-        mClub.add(clubEdit);
-
-
-        Map<String, Object> majors = new HashMap<>();
-        ArrayList<String> mMajor = new ArrayList<>();
-        mClub.add(majorEdit);
+        Map<String, Object> country = new HashMap<>();
+        ArrayList<String> mCountry = new ArrayList<>();
+        mCountry.add(countryEdit);
 
 
-        majors.put("majors", mMajor);
-        classes.put("classes", mClasses);
-        clubs.put("clubs", mClub);
-        internships.put("internships", mInternship);
+        country.put("country", mCountry);
+        city.put("city", mCity);
+        aboutMe.put("aboutme", mAboutMe);
 
         Map<String, Object> dataMap = new HashMap<>();
 
@@ -129,19 +146,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         dataMap.put("password", passwordEdit);
         dataMap.put("email", emailEdit);
 
-
-        //dataMap.put("status", "try status"+random.nextInt(50));
-
-        //study abroad
-        //dataMap.put("studyAbroad", true);
-        //dataMap.put("abroadCountries", "Hungary");
-
-
         ref.set(dataMap);
-        ref.collection("courses").document().set(classes);
-        ref.collection("internships").document().set(internships);
-        ref.collection("clubs").document().set(clubs);
-        ref.collection("majors").document().set(majors);
+        ref.collection("city").document().set(city);
+        ref.collection("aboutme").document().set(aboutMe);
+        ref.collection("country").document().set(country);
 
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

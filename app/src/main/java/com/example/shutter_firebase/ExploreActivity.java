@@ -83,22 +83,20 @@ public class ExploreActivity extends AppCompatActivity {
         });
     }
     private void loadData(){
-        db.collection("users")
+        db.collection("photographers")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for(DocumentSnapshot querySnapshot: task.getResult()){
                             User user = new User(
-                                    querySnapshot.getString("email"),
                                     querySnapshot.getId(),
                                     querySnapshot.getString("name"),
-                                    querySnapshot.getString("major"),
-                                    querySnapshot.getDocumentReference("courses"),
-                                    querySnapshot.getDocumentReference("internships"),
-                                    querySnapshot.getDocumentReference("clubs"));
-
-
+                                    querySnapshot.getString("email"),
+                                    querySnapshot.getString("country"),
+                                    querySnapshot.getString("city"),
+                                    querySnapshot.getString("aboutme"),
+                                    querySnapshot.getString("imageurl"));
                             profileArrayList.add(user);
                         }
                         adapter = new RecyclerViewAdapter(ExploreActivity.this, profileArrayList);
@@ -113,6 +111,7 @@ public class ExploreActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     private void setUpFireBase(){
         db = FirebaseFirestore.getInstance();

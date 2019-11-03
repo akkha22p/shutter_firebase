@@ -10,37 +10,33 @@ public class User implements Serializable{
     private String uid;
 
     private String name;
-    private String major;
+    private String country;
     private String email;
 
-    private DocumentReference courses;
+    private String city;
 
-    private DocumentReference internships;
-    private DocumentReference clubs;
-
+    private String aboutme;
+    private String imageurl;
 
 
     public User(
             String uid,
             String name,
             String email,
-            String major,
-            DocumentReference courses,
-            DocumentReference internships,
-            DocumentReference clubs
+            String country,
+            String city,
+            String aboutme,
+            String imageurl
     )
 
     {
         this.uid = uid;
         this.name = name;
-        this.major = major;
-        this.courses = courses;
-        //this.abroadCountry = abroadCountry;
-        this.clubs = clubs;
-       // this.studyAbroad = studyAbroad;
-        this.internships = internships;
-
-        this.email =email;
+        this.country = country;
+        this.city = city;
+        this.aboutme = aboutme;
+        this.email = email;
+        this.imageurl = imageurl;
     }
 
     public String getId(){
@@ -52,25 +48,17 @@ public class User implements Serializable{
     public String getEmail(){
         return email;
     }
-    public String getMajor(){
-        return major;
+    public String getCountry(){
+        return country;
     }
-
-
-  // public String getAbroadCountry(){
-  //      return abroadCountry;
-  //  }
-    public DocumentReference getCourses(){
-        return courses;
+    public String getCity(){
+        return city;
     }
-    public DocumentReference getInternship(){
-        return internships;
+    public String getAboutMe(){
+        return aboutme;
     }
-
-   // public boolean getStudyAborad(){
-   //     return studyAbroad;}
-    public DocumentReference getClubs(){
-        return clubs;
+    public String getImageUrl(){
+        return imageurl;
     }
 
 

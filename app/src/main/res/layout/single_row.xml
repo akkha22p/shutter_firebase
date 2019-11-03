@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/profileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"/>
 
@@ -19,7 +20,7 @@
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/userMajor"
+            android:id="@+id/userCountry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
